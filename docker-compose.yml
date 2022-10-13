@@ -1,0 +1,49 @@
+version: '3.9'
+services:
+  web:
+    build: .
+    command: python /code/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    environment:
+      - "DJANGO_SECRET_KEY=django-insecure-33b612%09ku3nu)m)7dd6+sbiec7ww9&edk*3%lzozp_7fdfm*"
+      - "DJANGO_DEBUG=TRUE"
+      - "POSTGRES_NAME=postgres"
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=postgres"
+      - "POSTGRES_HOST=db"
+
+  db:
+    container_name: postgredb
+    image: postgres
+    restart: always
+    volumes:
+      - ./postgre_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+    ports:
+      - "5555:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    restart: unless-stopped
+
+networks:
+  default:
+    name: postgre-service_default
+
+volumes:
+  postgres_data:
