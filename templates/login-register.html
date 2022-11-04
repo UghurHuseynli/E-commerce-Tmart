@@ -54,7 +54,7 @@
                                 <span class="forget"><a href="{% url 'password_reset' %}">Forget Pasword?</a></span>
                             </div>
                             <div class="htc__login__btn mt--30">
-                                <a role="button" onclick="document.getElementById('login_form_custom').submit()">Login</a>
+                                <a id="loginButtonForToken" role="button">Login</a>
                             </div>
                             <div class="htc__social__connect">
                                 <h2>Or Login With</h2>
@@ -72,7 +72,7 @@
                             <form id="register_form_custom" class="login" method="post">
                                 {% csrf_token %}
                                 {% for field in form_register %}
-                                {{ field }}
+                                    {{ field }}
                                     {% for error in field.errors %}
                                         <div class="alert alert-danger">
                                             {{error}}
@@ -106,3 +106,9 @@
 </div>
 <!-- End Login Register Area -->
 {% endblock content %}
+
+
+{% block js %}
+    <script src="{% static 'custom_js/getToken.js' %}"></script>
+{% endblock js %}
+    

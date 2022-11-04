@@ -78,9 +78,13 @@ class PaymentDetailModelForm(forms.ModelForm):
 					'placeholder': 'Card Number*'
 				}
 			),
-			# 'card_date': forms.DateTimeInput(
-				
-			# ),
+			# 'card_date': DatePickerInput(),
+			'card_date': forms.DateInput(
+				attrs={
+					'type': 'date'
+				}
+			),
+
 			'secure_code': forms.TextInput(
 				attrs= {
 					'type': 'text',

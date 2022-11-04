@@ -1,5 +1,10 @@
-from django.shortcuts import render
+from audioop import reverse
+from multiprocessing import context
+from django.shortcuts import redirect, render
 from django.views.generic import CreateView
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .models import CheckoutModel
 from .forms import BillingAddressModelForm, PaymentDetailModelForm
 
@@ -8,7 +13,8 @@ from .forms import BillingAddressModelForm, PaymentDetailModelForm
 def cart(requests):
     return render(requests, 'cart.html')
 
-class CheckoutView(CreateView):
+
+class CheckoutView(LoginRequiredMixin, CreateView):
     model = CheckoutModel
     form_class = BillingAddressModelForm
     template_name = 'checkout.html'
@@ -20,6 +26,22 @@ class CheckoutView(CreateView):
             'payment': PaymentDetailModelForm()
         }
         return render(request, 'checkout.html', context=context)
+
+    def post(self, request, *args, **kwargs):
+        new_billing = BillingAddressModelForm(request.POST)
+        new_payment = PaymentDetailModelForm(request.POST)
+        if new_billing.is_valid() and new_payment.is_valid():
+            new_billing.instance.user_id = request.user
+            new_billing.save()
+            new_payment.save()
+            messages.success(request, 'Thank you for your payment. Your invoice has been sent to your mail.')
+            return redirect('/')
+        context = {
+            'billing': new_billing,
+            'payment': new_payment,
+        }
+        return render(request, 'checkout.html', context = context)
+
 
 def checkout(requests):
     return render(requests, 'checkout.html')

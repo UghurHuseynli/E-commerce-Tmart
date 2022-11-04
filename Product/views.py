@@ -41,7 +41,7 @@ class ProductDetailView(DetailView, CreateView):
             return redirect(reverse('product_detail', kwargs={'slug': kwargs['slug']}))
         context = {
             'product': product,
-            'product_version': ProductVersionModel.objects.filter(product_id = ProductModel.objects.get(slug = kwargs['slug']).id).all(),
+            'product_version': ProductVersionModel.objects.filter(product_id = ProductModel.objects.get(slug = kwargs['slug'])).all(),
             'review_form': new_review
         }
         return render(request, 'product-details.html', context = context)

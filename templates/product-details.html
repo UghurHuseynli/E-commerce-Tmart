@@ -146,14 +146,14 @@
                             <form id='myform' method='POST' action='#'>
                                 <div class="product-quantity">
                                     <div class="cart-plus-minus">
-                                        <input class="cart-plus-minus-box" type="text" name="qtybutton" value="02">
+                                        <input id="quantityInputSection" class="cart-plus-minus-box" type="text" name="qtybutton" value="2">
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <ul class="pro__dtl__btn">
-                        <li class="buy__now__btn"><a href="#">buy now</a></li>
+                        <li class="buy__now__btn"><a id="addToBasket" data-id = '{{ product.id }}'>add to card</a></li>
                         <li><a href="#"><span class="ti-heart"></span></a></li>
                         <li><a href="#"><span class="ti-email"></span></a></li>
                     </ul>
@@ -449,4 +449,5 @@
 
 {% block js %}
     <script src="{% static 'custom_js/product_details_rate.js' %}"></script>
+    <script src="{% static 'custom_js/basket.js' %}"></script>
 {% endblock js %}

@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+import asyncio
 from environs import Env 
+from datetime import timedelta
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from django.utils.translation import gettext_lazy as _
@@ -28,22 +31,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = env("DJANGO_SECRET_KEY")
-SECRET_KEY = 'django-insecure-33b612%09ku3nu)m)7dd6+sbiec7ww9&edk*3%lzozp_7fdfm*'
-
+SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = env.bool("DJANGO_DEBUG", default=False)
-DEBUG = True
+DEBUG = env.bool("DJANGO_DEBUG", default=False)
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    #3th part
     'jazzmin',
     'modeltranslation',
+    #Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,7 +65,12 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'social_django',
+    'django_filters',
+    'corsheaders',
+    'rest_framework_simplejwt.token_blacklist',
+    'django_celery_beat',
 
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -71,8 +78,11 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -110,15 +120,11 @@ WSGI_APPLICATION = 'Tmart.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Tmart',
-        'USER': 'postgres',
-        'PASSWORD': 'windwalker',
-        'HOST': 'localhost',
         'PORT': 5432,
-        # 'NAME': env("POSTGRES_NAME"),
-        # 'USER': env("POSTGRES_USER"),
-        # 'PASSWORD': env("POSTGRES_PASSWORD"),
-        # 'HOST': env("POSTGRES_HOST"),
+        'NAME': env("POSTGRES_NAME"),
+        'USER': env("POSTGRES_USER"),
+        'PASSWORD': env("POSTGRES_PASSWORD"),
+        'HOST': env("POSTGRES_HOST"),
     }
 }
 
@@ -145,7 +151,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'az'
+LANGUAGE_CODE = 'en'
 
 gettext = lambda s: s
 LANGUAGES = (
@@ -159,7 +165,7 @@ LOCALE_PATHS = [
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
 MODELTRANSLATION_LANGUAGES = ('en', 'az')
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Baku'
 
 USE_I18N = True
 
@@ -193,11 +199,13 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '471221589398-0asea9dq4q957s0j86jor433jkm7h1i0.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
 
-SOCIAL_AUTH_FACEBOOK_KEY = "2627288437406104"
-SOCIAL_AUTH_FACEBOOK_SECRET = "007dfb3c948e1fb347b1346604435680"
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+
+SOCIAL_AUTH_FACEBOOK_KEY = env('SOCIAL_AUTH_FACEBOOK_KEY')
+
+SOCIAL_AUTH_FACEBOOK_SECRET = env('SOCIAL_AUTH_FACEBOOK_SECRET')
 
 # SOCIAL_AUTH_PIPELINE = (
 #     'social_core.pipeline.social_auth.social_details',
@@ -218,20 +226,34 @@ SOCIAL_AUTH_FACEBOOK_SECRET = "007dfb3c948e1fb347b1346604435680"
 #     ('link', 'profile_url'),
 # ]
 
-LOGIN_URL = 'account'
+LOGIN_URL = '/account/'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_URL = 'account'
-LOGOUT_REDIRECT_URL = 'account'
+LOGOUT_URL = '/account/'
+LOGOUT_REDIRECT_URL = '/account/'
 
 # Send email settings 
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'ugurhuseynli531@gmail.com'
-EMAIL_HOST_PASSWORD = 'nujdebpfsteqrcrs'
+EMAIL_USE_TLS = True
 
+
+
+
+# for gmail on send_mail 
+EMAIL_HOST = env('GMAIL_EMAIL_HOST')
+EMAIL_HOST_USER = env('GMAIL_EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('GMAIL_EMAIL_HOST_PASSWORD')
+
+# for mailgun 
+# EMAIL_HOST = env('MAILGUN_EMAIL_HOST')
+# EMAIL_HOST_USER = env('MAILGUN_EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = env('MAILGUN_EMAIL_HOST_PASSWORD')
+
+# for sendgrid
+# DEFAULT_FROM_EMAIL = env('SENDGRID_DEFAULT_FROM_EMAIL')
+# EMAIL_HOST = env('SENDGRID_EMAIL_HOST')
+# EMAIL_HOST_USER = env('SENDGRID_EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = env('SENDGRID_EMAIL_HOST_PASSWORD')
 
 LOGGING = {
     'version': 1,
@@ -257,7 +279,7 @@ LOGGING = {
 
 
 sentry_sdk.init(
-    dsn="https://3666ee4b489d44e3abd743a30c1b92b8@o4503970896281600.ingest.sentry.io/4503971003629568",
+    dsn=env('SENTRY_SDK'),
     integrations=[
         DjangoIntegration(),
     ],
@@ -271,3 +293,143 @@ sentry_sdk.init(
     # django.contrib.auth) you may enable sending PII data.
     send_default_pii=True
 )
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+REST_FRAMEWORK = {
+    
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 5,
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "Tmart",
+        "TIMEOUT": 15,
+    }
+}
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_TIMEZONE = 'Asia/Baku'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+JAZZMIN_SETTINGS = {
+    # title of the window (Will default to current_admin_site.site_title if absent or None)
+    "site_title": "Admin",
+
+    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_header": "Tmart",
+
+    # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_brand": "Tmart",
+
+    # Logo to use for your site, must be present in static files, used for brand on top left
+    "site_logo": "../static/images/favicon.ico",
+
+    # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
+    "login_logo": None,
+
+    # Logo to use for login form in dark themes (defaults to login_logo)
+    "login_logo_dark": None,
+
+    # CSS classes that are applied to the logo above
+    "site_logo_classes": "img-circle",
+
+    # Relative path to a favicon for your site, will default to site_logo if absent (ideally 32x32 px)
+    "site_icon": None,
+
+    # Welcome text on the login screen
+    "welcome_sign": "Welcome to the Tmart admin page",
+
+    # Copyright on the footer
+    "copyright": "Uğur Hüseynli",
+
+    # The model admin to search from the search bar, search bar omitted if excluded
+    "search_model": "User.UserModel",
+
+    # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
+    "user_avatar": None,
+
+    # Whether to display the side menu
+    "show_sidebar": True,
+
+    # Whether to aut expand the menu
+    "navigation_expanded": False,
+
+    # Hide these apps when generating side menu e.g (auth)
+    "hide_apps": [],
+
+    # Hide these models when generating side menu (e.g auth.user)
+    "hide_models": [],
+}
+
+# for verify_email
+asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+# Django_debug_toolbar
+import socket
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
+
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.settings.SettingsPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    'debug_toolbar.panels.templates.TemplatesPanel',
+    'debug_toolbar.panels.cache.CachePanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.redirects.RedirectsPanel',
+]

@@ -31,7 +31,6 @@
 
     <!-- Modernizr JS -->
     <script src="{% static 'js/vendor/modernizr-2.8.3.min.js' %}"></script>
-
     {% block css %}
     {% endblock css %}
 </head>
@@ -45,6 +44,8 @@
         <!-- Start Header Style -->
         {% include 'includes/navbar.html' %}
         <!-- End Header Style -->
+        <!-- Subscriber form modal -->
+        <!-- End modal -->
         {% block content %}
             
         {% endblock content %}
@@ -68,8 +69,23 @@
     <script src="{% static 'js/owl.carousel.min.js' %}"></script>
     <!-- Waypoints.min.js. -->
     <script src="{% static 'js/waypoints.min.js' %}"></script>
+    <!-- Axios  -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Main js file that contents all jQuery plugins activation. -->
     <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'custom_js/footer_subscriber.js' %}"></script>
     {% block js %}
     {% endblock js %}
 </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
