@@ -1,0 +1,147 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+
+{% block css %}
+    <script src="https://kit.fontawesome.com/acf2e7cb15.js" crossorigin="anonymous"></script>
+{% endblock css %}
+    
+
+{% block content %}
+
+<!-- Start Bradcaump area -->
+<div class="ht__bradcaump__area"
+    style="background: rgba(0, 0, 0, 0) url({% static 'images/bg/2.jpg' %}) no-repeat scroll center center / cover ;">
+    <div class="ht__bradcaump__wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="bradcaump__inner text-center">
+                        <h2 class="bradcaump-title">Shop Page</h2>
+                        <nav class="bradcaump-inner">
+                            <a class="breadcrumb-item" href="{% url 'index' %}">Home</a>
+                            <span class="brd-separetor">/</span>
+                            <span class="breadcrumb-item active"><a href="{% url 'product' %}">Shop Page</a></span>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Bradcaump area -->
+<!-- Start Our Product Area -->
+<section class="htc__product__area shop__page ptb--130 bg__white">
+    <div class="container">
+        <div class="htc__product__container">
+            <!-- Start Product MEnu -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="filter__menu__container">
+                        <div class="product__menu" id="productCategorySection">
+                            <button data-filter="" class="is-checked">All</button>
+                        </div>
+                        <div class="filter__box">
+                            <a class="filter__menu" href="#" id="filterModalButton">filter</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Start Filter Menu -->
+            <div class="filter__wrap">
+                <div class="filter__cart">
+                    <div class="filter__cart__inner">
+                        <div class="filter__menu__close__btn">
+                            <a href="#"><i class="zmdi zmdi-close"></i></a>
+                        </div>
+                        <div class="filter__content">
+                            <!-- Start Single Content -->
+                            <div class="fiter__content__inner">
+                                <div class="single__filter">
+                                    <h2>Sort By</h2>
+                                    <ul class="filter__list" id="filterListForSort">
+                                        <li><a class="eventListenerForSort" data-filter="">Default</a></li>
+                                        <li><a class="eventListenerForSort" data-filter="max">Max Price</a></li>
+                                        <li><a class="eventListenerForSort" data-filter="min">Low Price</a></li>
+                                        <li><a class="eventListenerForSort" data-filter="name">Product Name</a></li>
+                                        <li><a class="eventListenerForSort" data-filter="name-reverse">Product Name Reverse</a></li>
+                                    </ul>
+                                </div>
+                                <div class="single__filter">
+                                    <h2>Size</h2>
+                                    <ul class="filter__list" id="filterListForSize">
+                                        <li><a class="eventListenerForSize" data-filter="">All</a></li>
+                                    </ul>
+                                </div>
+                                <div class="single__filter">
+                                    <h2>Tags</h2>
+                                    <ul class="filter__list" id="filterListForTags">
+                                        <li><a class="eventListenerForTags" data-filter="">#All</a></li>
+                                    </ul>
+                                </div>
+                                <div class="single__filter">
+                                    <h2>Brands</h2>
+                                    <ul class="filter__list" id="filterListForBrands">
+                                        <li><a class="eventListenerForTags" data-filter="">All</a></li>
+                                    </ul>
+                                </div>
+                                <div class="single__filter">
+                                    <h2>Price</h2>
+                                    <ul class="filter__list" id="filterListForPrice">
+                                        <li><a class="eventListenerForPrice" data-filter="">All</a></li>
+                                        <li><a class="eventListenerForPrice" data-filter="0-50">$0.00 - $50.00</a></li>
+                                        <li><a class="eventListenerForPrice" data-filter="50-100">$50.00 - $100.00</a></li>
+                                        <li><a class="eventListenerForPrice" data-filter="100-500">$100.00 - $500.00</a></li>
+                                        <li><a class="eventListenerForPrice" data-filter="500-1000">$500.00 - $1000.00</a></li>
+                                        <li><a class="eventListenerForPrice" data-filter="1000-2000">$1000.00 - $2000.00</a></li>
+                                        <li><a class="eventListenerForPrice" data-filter="2000-5000">$2000.00 - $5000.00</a></li>
+                                        <li><a class="eventListenerForPrice" data-filter="5000-">$5000.00 - Above</a></li>
+
+                                    </ul>
+                                </div>
+                                <div class="single__filter">
+                                    <h2>Color</h2>
+                                    <ul class="filter__list sidebar__list" id="filterListForColor">
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- End Single Content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Filter Menu -->
+            <!-- End Product MEnu -->
+            <div class="row">
+                <div class="product__list another-product-style" id="productSection">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Body main wrapper end -->
+<!-- QUICKVIEW PRODUCT -->
+<div id="quickview-wrapper">
+    <!-- Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal__container" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body" id="customModalSection">
+                    <!-- .modal-product -->
+                </div><!-- .modal-body -->
+            </div><!-- .modal-content -->
+        </div><!-- .modal-dialog -->
+    </div>
+    <!-- END Modal -->
+</div>
+{% endblock content %}
+
+
+{% block js %}
+    <script src="{% static 'custom_js/product.js' %}"></script>
+{% endblock js %}
+    

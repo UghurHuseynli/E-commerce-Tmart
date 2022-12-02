@@ -1,0 +1,35 @@
+#img_label_cst{
+    margin: 1rem 0 1rem 0;
+    font-weight: 400;
+    font-size: large;
+}
+
+#imgAndRateDiv{
+    display: flex;
+    justify-content: space-between;
+}
+
+#rateInputSection{
+    /* border: 0; */
+    cursor: default;
+    margin-left: 1rem;
+}
+
+.my_custom_rating_section{
+    display: flex;
+    gap: 0.2rem;
+}
+
+.D-flex{
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+.slick-track:first-child a img{
+    margin-left: 0px;
+}
+
+#quantityInputSection{
+    margin-left: 10px;
+    border: 0;
+}

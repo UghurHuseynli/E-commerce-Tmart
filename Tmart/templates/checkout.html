@@ -1,0 +1,302 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+
+{% block css %}
+    <style>
+        .single-checkout-box input[type="date"] {
+        background: transparent none repeat scroll 0 0;
+        border: 1px solid #c1c1c1;
+        border-radius: 0;
+        color: #767676;
+        font-size: 12px;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 20px;
+        padding-right: 20px;
+        width: 47.5%;
+        margin-bottom: 40px;
+        }
+        .error_parent_div {
+        display: grid; 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 2rem;
+        }
+        .error_child_left {
+            grid-column: 1/2;
+        }
+        .error_child_right{
+            grid-column: 2/3;
+        }
+    </style>
+{% endblock css %}
+    
+
+{% block content %}
+
+<!-- Start Bradcaump area -->
+<div class="ht__bradcaump__area"
+    style="background: rgba(0, 0, 0, 0) url({% static 'images/bg/2.jpg' %}) no-repeat scroll center center / cover ;">
+    <div class="ht__bradcaump__wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="bradcaump__inner text-center">
+                        <h2 class="bradcaump-title">Checkout</h2>
+                        <nav class="bradcaump-inner">
+                            <a class="breadcrumb-item" href="{% url 'index' %}">Home</a>
+                            <span class="brd-separetor">/</span>
+                            <span class="breadcrumb-item active">Checkout</span>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Bradcaump area -->
+<!-- Start Checkout Area -->
+<section class="our-checkout-area ptb--120 bg__white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-8">
+                <div class="ckeckout-left-sidebar">
+                    <!-- Start Checkbox Area -->
+                    <form action="" method="post" id="checkout_custom_form">
+                        {% csrf_token %}
+                        <div class="checkout-form">
+                            <h2 class="section-title-3">Billing details</h2>
+                            <div class="checkout-form-inner">
+                                <!-- Error section  -->
+                                <div class="single-checkout-box error_parent_div">
+                                    {% if billing.first_name.errors %}
+                                        <div class="alert alert-danger error_child_left">
+                                            {{ billing.first_name.errors }}
+                                        </div>
+                                    {% endif %}
+                                    {% if billing.last_name.errors %}
+                                        <div class="alert alert-danger error_child_right">
+                                            {{ billing.last_name.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <!-- End error section  -->
+                                <div class="single-checkout-box">
+                                    {{ billing.first_name }}
+                                    {{ billing.last_name }}
+                                </div>
+                                <!-- Error section  -->
+                                <div class="single-checkout-box error_parent_div">
+                                    {% if billing.email.errors %}
+                                        <div class="alert alert-danger error_child_left">
+                                            {{ billing.email.errors }}
+                                        </div>
+                                    {% endif %}
+                                    {% if billing.phone.errors %}
+                                        <div class="alert alert-danger error_child_right">
+                                            {{ billing.phone.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <!-- End error section  -->
+                                <div class="single-checkout-box">
+                                    {{ billing.email }}
+                                    {{ billing.phone }}
+                                </div>
+                                <div class="single-checkout-box">
+                                    {% if billing.message.errors %}
+                                        <div class="alert alert-danger">
+                                            {{ billing.message.errors }}
+                                        </div>
+                                    {% endif %}
+                                    {{ billing.message }}
+                                </div>
+                                <!-- Error section  -->
+                                <div class="single-checkout-box error_parent_div mt--40">
+                                    {% if billing.country.errors %}
+                                        <div class="alert alert-danger error_child_left">
+                                            {{ billing.country.errors }}
+                                        </div>
+                                    {% endif %}
+                                    {% if billing.company.errors %}
+                                        <div class="alert alert-danger error_child_right">
+                                            {{ billing.company.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <!-- End error section  -->
+                                <div class="single-checkout-box select-option">
+                                    {{ billing.country }}
+                                    {{ billing.company }}
+                                </div>
+                                <!-- Error section  -->
+                                <div class="single-checkout-box error_parent_div">
+                                    {% if billing.state.errors %}
+                                        <div class="alert alert-danger error_child_left">
+                                            {{ billing.state.errors }}
+                                        </div>
+                                    {% endif %}
+                                    {% if billing.zip_code.errors %}
+                                        <div class="alert alert-danger error_child_right">
+                                            {{ billing.zip_code.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <!-- End error section  -->
+                                <div class="single-checkout-box">
+                                    {{ billing.state }}
+                                    {{ billing.zip_code }}
+                                </div>
+                                <!-- <div class="single-checkout-box checkbox">
+                                    <input id="remind-me" type="checkbox">
+                                    <label for="remind-me"><span></span>Create a Account ?</label>
+                                </div> -->
+                            </div>
+                        </div>
+                        <!-- End Checkbox Area -->
+                        <!-- Start Payment Box -->
+                        <div class="payment-form">
+                            <h2 class="section-title-3">payment details</h2>
+                            <p>Lorem ipsum dolor sit amet, consectetur kgjhyt</p>
+                            <div class="payment-form-inner">
+                                <!-- Error section  -->
+                                <div class="single-checkout-box error_parent_div">
+                                    {% if payment.card_name.errors %}
+                                        <div class="alert alert-danger error_child_left">
+                                            {{ payment.card_name.errors }}
+                                        </div>
+                                    {% endif %}
+                                    {% if payment.card_number.errors %}
+                                        <div class="alert alert-danger error_child_right">
+                                            {{ payment.card_number.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <!-- End error section  -->
+                                <div class="single-checkout-box">
+                                    {{ payment.card_name }}
+                                    {{ payment.card_number }}
+                                </div>
+                                <!-- Error section  -->
+                                <div class="single-checkout-box error_parent_div">
+                                    {% if payment.card_date.errors %}
+                                        <div class="alert alert-danger error_child_left">
+                                            {{ payment.card_date.errors }}
+                                        </div>
+                                    {% endif %}
+                                    {% if payment.secure_code.errors %}
+                                        <div class="alert alert-danger error_child_right">
+                                            {{ payment.secure_code.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <!-- End error section  -->
+                                <div class="single-checkout-box select-option">
+                                    {{ payment.card_date }}
+                                    {{ payment.secure_code }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- End Payment Box -->
+                        <!-- Start Payment Way -->
+                        <div class="our-payment-sestem">
+                            <h2 class="section-title-3">We Accept :</h2>
+                            <ul class="payment-menu">
+                                <li><a href="#"><img src="{% static 'images/payment/1.jpg' %}" alt="payment-img"></a>
+                                </li>
+                                <li><a href="#"><img src="{% static 'images/payment/2.jpg' %}" alt="payment-img"></a>
+                                </li>
+                                <li><a href="#"><img src="{% static 'images/payment/3.jpg' %}" alt="payment-img"></a>
+                                </li>
+                                <li><a href="#"><img src="{% static 'images/payment/4.jpg' %}" alt="payment-img"></a>
+                                </li>
+                                <li><a href="#"><img src="{% static 'images/payment/5.jpg' %}" alt="payment-img"></a>
+                                </li>
+                            </ul>
+                            <div class="checkout-btn">
+                                <a class="ts-btn btn-light btn-large hover-theme" onclick="document.getElementById('checkout_custom_form').submit()">CONFIRM & BUY NOW</a>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- End Payment Way -->
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-4">
+                <div class="checkout-right-sidebar">
+                    <div class="our-important-note">
+                        <h2 class="section-title-3">Note :</h2>
+                        <p class="note-desc">Lorem ipsum dolor sit amet, consectetur adipisici elit, sed do eiusmod
+                            tempor incididunt ut laborekf et dolore magna aliqua.</p>
+                        <ul class="important-note">
+                            <li><a href="#"><i class="zmdi zmdi-caret-right-circle"></i>Lorem ipsum dolor sit amet,
+                                    consectetur nipabali</a></li>
+                            <li><a href="#"><i class="zmdi zmdi-caret-right-circle"></i>Lorem ipsum dolor sit amet</a>
+                            </li>
+                            <li><a href="#"><i class="zmdi zmdi-caret-right-circle"></i>Lorem ipsum dolor sit amet,
+                                    consectetur nipabali</a></li>
+                            <li><a href="#"><i class="zmdi zmdi-caret-right-circle"></i>Lorem ipsum dolor sit amet,
+                                    consectetur nipabali</a></li>
+                            <li><a href="#"><i class="zmdi zmdi-caret-right-circle"></i>Lorem ipsum dolor sit amet</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="puick-contact-area mt--60">
+                        <h2 class="section-title-3">Quick Contract</h2>
+                        <a href="phone:+8801722889963">+012 345 678 102 </a>
+                    </div>
+                    <div style="margin-top: 4rem;">
+                        <tr>
+                            <td style="display: flex;"><span style="font-size: 18px; margin-right: 12rem;">Total Amount:</span> {{ price }}</td>
+                        </tr>
+                    </div>
+                    <div>
+                        <div style="margin-top: 2rem;" id="paypal-button-container"></div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+</section>
+<!-- End Checkout Area -->
+{% endblock content %}
+
+
+{% block js %}
+    <script src="https://www.paypal.com/sdk/js?client-id=AQlCEAB8cVuLGijSY-0qsRMRWEYG9a-L4MKfPkWCVwufaNB9HsQ43ffhqxGHxdPBPuHl3rDcjJj3HPco&currency=USD"></script>
+
+    <script>
+        // Render the PayPal button into #paypal-button-container
+        paypal.Buttons({
+
+             style: {
+                color:  'blue',
+                shape:  'rect',
+                label:  'pay',
+                height: 40
+            },
+
+            // Set up the transaction
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '{{ price }}'
+                        }
+                    }]
+                });
+            },
+
+            // Finalize the transaction
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // Show a success message to the buyer
+                    alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                });
+            }
+
+
+        }).render('#paypal-button-container');
+    </script>
+{% endblock js %}
+    

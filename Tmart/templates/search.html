@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+
+{% block css %}
+    <script src="https://kit.fontawesome.com/acf2e7cb15.js" crossorigin="anonymous"></script>
+{% endblock css %}
+    
+
+{% block content %}
+
+<!-- Start Bradcaump area -->
+<div class="ht__bradcaump__area"
+    style="background: rgba(0, 0, 0, 0) url({% static 'images/bg/2.jpg' %}) no-repeat scroll center center / cover ;">
+    <div class="ht__bradcaump__wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="bradcaump__inner text-center">
+                        <h2 class="bradcaump-title">Search Page</h2>
+                        <nav class="bradcaump-inner">
+                            <a class="breadcrumb-item" href="{% url 'index' %}">Home</a>
+                            <span class="brd-separetor">/</span>
+                            <span class="breadcrumb-item active"><a href="{% url 'search' %}">Search Page</a></span>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Bradcaump area -->
+<!-- Start Our Product Area -->
+<section class="htc__product__area shop__page ptb--130 bg__white">
+    <div class="container">
+        <div class="htc__product__container">
+            <div class="row">
+                <div class="product__list another-product-style">
+                    {% for product in products %}
+                        <div class="col-md-3 single__pro col-lg-3 cat--1 col-sm-4 col-xs-12">
+                            <div class="product foo">
+                                <div class="product__inner">
+                                    <div class="pro__thumb">
+                                        <a href="{% url 'product_detail' product.slug %}">
+                                            <img src="{{ product.img.url }}" alt="{{ product.name }} images">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="product__details">
+                                    <h2><a href="{% url 'product_detail' product.slug %}">{{ product.name }}</a></h2>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+
+    
