@@ -5,7 +5,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .models import UserModel
 from .forms import UserModelRegisterForm, UserLoginForm, ForgetForm, ResetForm
-from .token import account_activation_token
+from .tokens import account_activation_token
 from .tasks import send_email_task
 
 
